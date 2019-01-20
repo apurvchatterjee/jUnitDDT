@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -19,6 +21,7 @@ public class TestBase {
 
 	public static final String PROJPATH = System.getProperty("user.dir");
 	private static final String PROPPATH = "src/main/resources/properties/";
+	public static boolean isLoggedIn = false;
 
 	public static Properties CONFIG = null;
 	public static Properties OR = null;
@@ -67,8 +70,12 @@ public class TestBase {
 		}
 	}
 
-	public static void main(String[] args) {
-		doInitialize();
-		System.out.println(CONFIG.getProperty("testsite"));
+	public static WebElement getObject(String xpathkey) {
+		try {
+			return driver.findElement(By.xpath(OR.getProperty(xpathkey)));
+		} catch (Throwable t) {
+			System.out.println("unable to locate element: " + xpathkey);
+			return null;
+		}
 	}
 }

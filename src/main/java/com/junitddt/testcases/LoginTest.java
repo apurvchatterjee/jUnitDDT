@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.junitddt.base.TestBase;
+import com.junitddt.library.AppSpecificFunctions;
 
 public class LoginTest extends TestBase {
 
@@ -14,7 +15,7 @@ public class LoginTest extends TestBase {
 
 	@Test
 	public void testValidLogin() {
-
+		AppSpecificFunctions.doLogin("tutorial", "tutorial");
 	}
 
 }
