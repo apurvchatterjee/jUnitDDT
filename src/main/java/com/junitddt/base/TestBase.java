@@ -1,9 +1,10 @@
-package com.base;
+package com.junitddt.base;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,7 +16,9 @@ public class TestBase {
 
 	public static WebDriver dr = null;
 	public static EventFiringWebDriver driver = null;
+
 	public static final String PROJPATH = System.getProperty("user.dir");
+	private static final String PROPPATH = "src/main/resources/properties/";
 
 	public static Properties CONFIG = null;
 	public static Properties OR = null;
@@ -32,13 +35,13 @@ public class TestBase {
 			LOGGER = new Properties();
 
 			try {
-				fin = new FileInputStream(PROJPATH + "src/main/resources/config.properties");
+				fin = new FileInputStream(PROJPATH + PROPPATH + "config.properties");
 				CONFIG.load(fin);
 
-				fin = new FileInputStream(PROJPATH + "src/main/resources/or.properties");
+				fin = new FileInputStream(PROJPATH + PROPPATH + "or.properties");
 				OR.load(fin);
 
-				fin = new FileInputStream(PROJPATH + "src/main/resources/log4j.properties");
+				fin = new FileInputStream(PROJPATH + PROPPATH + "log4j.properties");
 				LOGGER.load(fin);
 
 			} catch (FileNotFoundException e) {
@@ -49,16 +52,18 @@ public class TestBase {
 
 			// initialize web driver now
 			if (CONFIG.getProperty("browser").equalsIgnoreCase("IE")) {
-				System.setProperty(CONFIG.getProperty("ie_key"), CONFIG.getProperty("ie_driverpath"));
+				System.setProperty(CONFIG.getProperty("ie_key"), PROJPATH + CONFIG.getProperty("ie_driverpath"));
 				dr = new InternetExplorerDriver();
 			} else if (CONFIG.getProperty("browser").equalsIgnoreCase("FIREFOX")) {
-				System.setProperty(CONFIG.getProperty("ff_key"), CONFIG.getProperty("ff_driverpath"));
+				System.setProperty(CONFIG.getProperty("ff_key"), PROJPATH + CONFIG.getProperty("ff_driverpath"));
 				dr = new FirefoxDriver();
 			} else if (CONFIG.getProperty("browser").equalsIgnoreCase("CHROME")) {
-				System.setProperty(CONFIG.getProperty("gc_key"), CONFIG.getProperty("gc_driverpath"));
+				System.setProperty(CONFIG.getProperty("gc_key"), PROJPATH + CONFIG.getProperty("gc_driverpath"));
 				dr = new ChromeDriver();
 			}
 			driver = new EventFiringWebDriver(dr);
+			driver.manage().window().maximize();
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		}
 	}
 
