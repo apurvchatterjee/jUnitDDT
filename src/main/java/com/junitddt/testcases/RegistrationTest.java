@@ -5,16 +5,16 @@ import org.junit.Test;
 
 import com.junitddt.base.TestBase;
 
-public class LoginTest extends TestBase {
-
+public class RegistrationTest extends TestBase {
+	
 	@Before
 	public void setUp() {
 		doInitialize();
 	}
-
+	
 	@Test
-	public void testValidLogin() {
-
+	public void testValidRegistration() {
+		
 	}
 
 }
