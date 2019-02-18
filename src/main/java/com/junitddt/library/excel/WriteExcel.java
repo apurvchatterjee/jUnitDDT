@@ -1,5 +1,9 @@
 package com.junitddt.library.excel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +11,11 @@ public class WriteExcel extends ExcelUtility {
 
 	public WriteExcel(String path) {
 		super(path);
+		try {
+			fos = new FileOutputStream(new File(path));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void writeRow(final String sheet, final String identifier, final HashMap<String, String> map) {
@@ -19,5 +28,15 @@ public class WriteExcel extends ExcelUtility {
 				}
 			}
 		}
+	}
+	
+	public void saveAndCloseExcel() {
+		try {
+			workbook.write(fos);
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

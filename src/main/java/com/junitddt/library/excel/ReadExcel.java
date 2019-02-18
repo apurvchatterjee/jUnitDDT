@@ -13,8 +13,8 @@ public class ReadExcel extends ExcelUtility {
 		Map<String, String> map = new HashMap<>();
 		int loc = getRowIndex(sheet, identifier);
 		if (loc != -999) {
-			for (int col = 0; col <= getTotalColumns(sheet); col++) {
-				map.put(getCellValue(sheet, 0, col), getCellValue(sheet, loc, col));
+			for (int col = 0; col < getTotalColumns(sheet); col++) {
+				map.put(getCellValue(sheet, 1, col), getCellValue(sheet, loc, col));
 			}
 		}
 		return map;

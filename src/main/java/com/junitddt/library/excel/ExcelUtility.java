@@ -12,16 +12,27 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
+/**
+ * This class contains major methods for the excel read/write functionalities.
+ * 
+ * @author Apurv Chatterjee
+ *
+ */
 public class ExcelUtility implements Excel {
 
-	private Workbook workbook;
+	protected Workbook workbook;
 	private FileInputStream fis;
-	private FileOutputStream fos;
+	protected FileOutputStream fos;
 
+	/**
+	 * Constructor to initialize the workbook objects.
+	 * 
+	 * @param path
+	 */
 	public ExcelUtility(String path) {
 		try {
 			fis = new FileInputStream(new File(path));
-			fos = new FileOutputStream(new File(path));
+			
 			if (path.endsWith("xlsx")) {
 				workbook = new XSSFWorkbook(fis);
 			} else if (path.endsWith("xls")) {
@@ -56,12 +67,12 @@ public class ExcelUtility implements Excel {
 
 	@Override
 	public int getTotalColumns(String sheet) {
-		return workbook.getSheet(sheet).getRow(0).getLastCellNum();
+		return workbook.getSheet(sheet).getRow(1).getLastCellNum();
 	}
 
 	@Override
 	public int getRowIndex(String sheet, String identifier) {
-		for (int row = 0; row < getTotalRows(sheet); row++) {
+		for (int row = 2; row < getTotalRows(sheet); row++) {
 			if (getCellValue(sheet, row, 0).equalsIgnoreCase(identifier))
 				return row;
 		}
@@ -71,18 +82,20 @@ public class ExcelUtility implements Excel {
 	@Override
 	public int getColumnIndex(String sheet, String identifier) {
 		for (int column = 0; column < getTotalRows(sheet); column++) {
-			if (getCellValue(sheet, 0, column).equalsIgnoreCase(identifier))
+			if (getCellValue(sheet, 1, column).equalsIgnoreCase(identifier))
 				return column;
 		}
 		return -999;
 	}
 
+	
+	/**
+	 * Use this method to close down all excel operations. <b>Note: </b> Use this
+	 * method only at the end of all excel operations.
+	 */
 	@Override
 	public void teardown() {
 		try {
-			
-			workbook.write(fos);
-			fos.close();
 			fis.close();
 			workbook.close();
 		} catch (IOException e) {
