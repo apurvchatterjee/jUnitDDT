@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,7 +46,7 @@ public class TestBase {
 				OR.load(fin);
 
 				fin = new FileInputStream(PROJPATH + PROPPATH + "log4j.properties");
-				LOGGER.load(fin);
+				PropertyConfigurator.configure(fin);
 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
