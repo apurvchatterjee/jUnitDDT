@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +15,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 public class TestBase {
 
@@ -24,59 +28,76 @@ public class TestBase {
 	private static final String PROPPATH = "src/main/resources/properties/";
 	public static boolean isLoggedIn = false;
 
-	public static Properties CONFIG = null;
 	public static Properties OR = null;
-	public static Properties LOGGER = null;
+	public static Logger logger = null;
+
+	public static Config config;
 
 	private static FileInputStream fin;
 
 	public static void doInitialize() {
 
+		initializeConfig();
+
 		if (driver == null) {
 			// initialize CONFIG property files
-			CONFIG = new Properties();
+			PropertyConfigurator.configure(config.getString("loggerprops"));
+			Logger.getLogger(TestBase.class);
 			OR = new Properties();
-			LOGGER = new Properties();
 
 			try {
-				fin = new FileInputStream(PROJPATH + PROPPATH + "config.properties");
-				CONFIG.load(fin);
-
+				logger.info("initilizing object repository now");
 				fin = new FileInputStream(PROJPATH + PROPPATH + "or.properties");
 				OR.load(fin);
-
-				fin = new FileInputStream(PROJPATH + PROPPATH + "log4j.properties");
-				PropertyConfigurator.configure(fin);
-
 			} catch (FileNotFoundException e) {
+				logger.error("\"or.properties\" not found in the pasth specified");
 				e.printStackTrace();
 			} catch (IOException e) {
+				logger.error("error reading \"or.properties\"");
 				e.printStackTrace();
 			}
 
 			// initialize web driver now
-			if (CONFIG.getProperty("browser").equalsIgnoreCase("IE")) {
-				System.setProperty(CONFIG.getProperty("ie_key"), PROJPATH + CONFIG.getProperty("ie_driverpath"));
+			if (config.getString("browser").equalsIgnoreCase("IE")) {
+				logger.info("browser configuration set to internet explorer");
+				System.setProperty(config.getString("ie_key"), PROJPATH + config.getString("ie_driverpath"));
+				logger.info("initializing internet explorer now");
 				dr = new InternetExplorerDriver();
-			} else if (CONFIG.getProperty("browser").equalsIgnoreCase("FIREFOX")) {
-				System.setProperty(CONFIG.getProperty("ff_key"), PROJPATH + CONFIG.getProperty("ff_driverpath"));
+			} else if (config.getString("browser").equalsIgnoreCase("FIREFOX")) {
+				logger.info("browser configuration set to mozilla firefox");
+				System.setProperty(config.getString("ff_key"), PROJPATH + config.getString("ff_driverpath"));
+				logger.info("initializing mozilla firefox now");
 				dr = new FirefoxDriver();
-			} else if (CONFIG.getProperty("browser").equalsIgnoreCase("CHROME")) {
-				System.setProperty(CONFIG.getProperty("gc_key"), PROJPATH + CONFIG.getProperty("gc_driverpath"));
+			} else if (config.getString("browser").equalsIgnoreCase("CHROME")) {
+				logger.info("browser configuration set to google chrome");
+				System.setProperty(config.getString("gc_key"), PROJPATH + config.getString("gc_driverpath"));
+				logger.info("initializing google chrome now");
 				dr = new ChromeDriver();
 			}
+
 			driver = new EventFiringWebDriver(dr);
+			logger.info("initializing the driver object now");
 			driver.manage().window().maximize();
+			logger.info("maximizing browser window now");
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			logger.info("default implicit wait is set to 30 seconds");
+
 		}
 	}
 
 	public static WebElement getObject(String xpathkey) {
 		try {
+			logger.info("trying to locate element by locater: " + OR.getProperty(xpathkey));
 			return driver.findElement(By.xpath(OR.getProperty(xpathkey)));
 		} catch (Throwable t) {
-			System.out.println("unable to locate element: " + xpathkey);
+			logger.error("unable to locate element with locator: " + OR.getProperty(xpathkey));
 			return null;
+		}
+	}
+
+	public static void initializeConfig() {
+		if (config == null) {
+			config = ConfigFactory.load();
 		}
 	}
 }

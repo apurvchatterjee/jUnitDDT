@@ -6,11 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.junitddt.base.TestBase;
 
 /**
  * This class contains major methods for the excel read/write functionalities.
@@ -18,7 +21,7 @@ import org.apache.poi.ss.usermodel.CellType;
  * @author Apurv Chatterjee
  *
  */
-public class ExcelUtility implements Excel {
+public class ExcelUtility extends TestBase implements Excel {
 
 	protected Workbook workbook;
 	private FileInputStream fis;
@@ -30,9 +33,12 @@ public class ExcelUtility implements Excel {
 	 * @param path
 	 */
 	public ExcelUtility(String path) {
+
+		logger = Logger.getLogger(ExcelUtility.class);
+
 		try {
 			fis = new FileInputStream(new File(path));
-			
+
 			if (path.endsWith("xlsx")) {
 				workbook = new XSSFWorkbook(fis);
 			} else if (path.endsWith("xls")) {
@@ -88,7 +94,6 @@ public class ExcelUtility implements Excel {
 		return -999;
 	}
 
-	
 	/**
 	 * Use this method to close down all excel operations. <b>Note: </b> Use this
 	 * method only at the end of all excel operations.
