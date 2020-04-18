@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,9 +29,9 @@ public class TestBase {
 	public static boolean isLoggedIn = false;
 
 	public static Properties OR = null;
-	public static Logger logger = null;
-
 	public static Config config;
+
+	public static Logger logger = LogManager.getLogger(TestBase.class.getName());
 
 	private static FileInputStream fin;
 
@@ -40,9 +40,7 @@ public class TestBase {
 		initializeConfig();
 
 		if (driver == null) {
-			// initialize CONFIG property files
-			PropertyConfigurator.configure(config.getString("loggerprops"));
-			Logger.getLogger(TestBase.class);
+
 			OR = new Properties();
 
 			try {

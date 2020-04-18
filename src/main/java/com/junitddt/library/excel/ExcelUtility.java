@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -34,7 +34,7 @@ public class ExcelUtility extends TestBase implements Excel {
 	 */
 	public ExcelUtility(String path) {
 
-		logger = Logger.getLogger(ExcelUtility.class);
+		logger = LogManager.getLogger(ExcelUtility.class);
 
 		try {
 			fis = new FileInputStream(new File(path));
