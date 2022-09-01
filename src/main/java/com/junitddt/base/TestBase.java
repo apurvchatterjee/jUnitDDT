@@ -44,11 +44,11 @@ public class TestBase {
 			OR = new Properties();
 
 			try {
-				logger.info("initilizing object repository now");
+				logger.info("initializing object repository now");
 				fin = new FileInputStream(PROJPATH + PROPPATH + "or.properties");
 				OR.load(fin);
 			} catch (FileNotFoundException e) {
-				logger.error("\"or.properties\" not found in the pasth specified");
+				logger.error("\"or.properties\" not found in the path specified");
 				e.printStackTrace();
 			} catch (IOException e) {
 				logger.error("error reading \"or.properties\"");
