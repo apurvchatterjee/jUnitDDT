@@ -14,7 +14,7 @@ public class WriteExcel extends ExcelUtility {
 		try {
 			fos = new FileOutputStream(new File(path));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

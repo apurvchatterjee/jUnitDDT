@@ -45,9 +45,9 @@ public class ExcelUtility extends TestBase implements Excel {
 				workbook = new HSSFWorkbook(fis);
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -104,7 +104,7 @@ public class ExcelUtility extends TestBase implements Excel {
 			fis.close();
 			workbook.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

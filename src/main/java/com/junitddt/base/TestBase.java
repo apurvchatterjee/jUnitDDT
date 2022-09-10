@@ -40,19 +40,17 @@ public class TestBase {
 		initializeConfig();
 
 		if (driver == null) {
-
 			OR = new Properties();
-
 			try {
 				logger.info("initializing object repository now");
 				fin = new FileInputStream(PROJPATH + PROPPATH + "or.properties");
 				OR.load(fin);
 			} catch (FileNotFoundException e) {
 				logger.error("\"or.properties\" not found in the path specified");
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			} catch (IOException e) {
 				logger.error("error reading \"or.properties\"");
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			// initialize web driver now
